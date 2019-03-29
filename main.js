@@ -12,7 +12,7 @@ const http = require("http");
 
 // Global variables
 // latest 100 messages
-const history = [ ];
+let history = [ ];
 // list of currently connected clients (users)
 const clients = [ ];
 
@@ -68,7 +68,7 @@ wsServer.on("request", function(req) {
 	// Accept connection
 	let connection = req.accept(null, req.origin);
 	// Add to clents set and keep an index
-	let userIdx = clients.push(Connection) - 1;
+	let userIdx = clients.push(connection) - 1;
 	let userName = false;
 	let userColor = false;
 
@@ -87,7 +87,7 @@ wsServer.on("request", function(req) {
 	connection.on("message", function(message) {
 		if(!message.type === "utf8") return; // Only handle UTF data
 		if(!userName) {
-			// First msg (initialize), set username
+			// First msg (initialize) will be the user's name
 			userName = escapeHTMLSpecial(message.utf8Data);
 			// Get random color and send it back to the user
 			userColor = colors.shift();
